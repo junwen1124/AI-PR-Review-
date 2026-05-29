@@ -97,11 +97,17 @@ def main():
     print(f"  Model: {args.model or os.getenv('AI_MODEL', 'deepseek-chat')}")
     print()
 
-    # Import modules (lazy to avoid import errors when just checking env)
-    from github_client import GitHubPRClient
-    from reviewer import build_user_prompt
-    from ai_client import AIClient
-    from formatter import format_review
+    # Import modules — try package-relative first, then direct
+    try:
+        from .github_client import GitHubPRClient
+        from .reviewer import build_user_prompt
+        from .ai_client import AIClient
+        from .formatter import format_review
+    except ImportError:
+        from github_client import GitHubPRClient
+        from reviewer import build_user_prompt
+        from ai_client import AIClient
+        from formatter import format_review
 
     # Step 1: Fetch PR from GitHub
     print("[1/3] Fetching PR from GitHub...")

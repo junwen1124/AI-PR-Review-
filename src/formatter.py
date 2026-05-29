@@ -36,7 +36,10 @@ def _render_rich(console: Console, pr_info: dict, review_text: str):
 
     # Try to parse structured JSON, fall back to raw markdown
     try:
-        from .reviewer import parse_review_response
+        try:
+            from .reviewer import parse_review_response
+        except ImportError:
+            from reviewer import parse_review_response
         review_data = parse_review_response(review_text)
 
         if review_data.get("parse_error"):
@@ -117,7 +120,10 @@ def _format_plain(pr_info: dict, review_text: str) -> str:
     lines.append("=" * 60)
 
     try:
-        from .reviewer import parse_review_response
+        try:
+            from .reviewer import parse_review_response
+        except ImportError:
+            from reviewer import parse_review_response
         review_data = parse_review_response(review_text)
 
         if review_data.get("parse_error"):
