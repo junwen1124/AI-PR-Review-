@@ -46,9 +46,13 @@ class AIClient:
         return content or ""
 
     def review(self, prompt: str, max_tokens: int = DEFAULT_MAX_TOKENS) -> str:
-        """Send a code review request. The prompt should already contain system+user combined."""
+        """Send a code review request. Uses the structured system prompt from reviewer."""
+        try:
+            from .reviewer import SYSTEM_PROMPT
+        except ImportError:
+            from reviewer import SYSTEM_PROMPT
         return self.chat(
-            system_prompt="You are an expert code reviewer. Analyze the PR diff and provide structured feedback.",
+            system_prompt=SYSTEM_PROMPT,
             user_prompt=prompt,
             max_tokens=max_tokens,
         )

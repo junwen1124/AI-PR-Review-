@@ -13,8 +13,8 @@
 ### 1. 克隆仓库
 
 ```bash
-git clone https://github.com/<your-username>/aipr.git
-cd aipr
+git clone https://github.com/junwen1124/AI-PR-Review-.git
+cd AI-PR-Review-
 ```
 
 ### 2. 创建虚拟环境并安装依赖

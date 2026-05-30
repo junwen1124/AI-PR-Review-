@@ -110,25 +110,25 @@ def main():
         from formatter import format_review
 
     # Step 1: Fetch PR from GitHub
-    print("[1/3] Fetching PR from GitHub...")
+    print("[1/3] 正在从 GitHub 获取 PR...")
     gh = GitHubPRClient(token=github_token)
     try:
         pr_info = gh.get_pr_info_from_url(args.pr)
         diff_text = gh.get_full_diff_from_url(args.pr)
     except Exception as e:
-        print(f"[ERROR] Failed to fetch PR: {e}")
+        print(f"[ERROR] 获取 PR 失败: {e}")
         sys.exit(1)
 
-    print(f"  Title: {pr_info['title']}")
-    print(f"  Author: {pr_info['author']}")
-    print(f"  Files: {pr_info['changed_files']} (+{pr_info['additions']} -{pr_info['deletions']})")
+    print(f"  标题: {pr_info['title']}")
+    print(f"  作者: {pr_info['author']}")
+    print(f"  文件数: {pr_info['changed_files']} (+{pr_info['additions']} -{pr_info['deletions']})")
 
     # Step 2: Build review prompt
-    print("[2/3] Building review prompt...")
+    print("[2/3] 正在构建审查 Prompt...")
     prompt = build_user_prompt(pr_info, diff_text, max_diff_length=args.max_diff_length)
 
     # Step 3: Call AI API
-    print("[3/3] Sending to AI model for review...")
+    print("[3/3] 正在调用 AI 模型进行审查...")
     ai_model = args.model or os.getenv("AI_MODEL", "deepseek-chat")
     ai_base_url = args.base_url or os.getenv("AI_BASE_URL", "https://api.deepseek.com/v1")
     ai = AIClient(api_key=ai_api_key, model=ai_model, base_url=ai_base_url)
@@ -136,7 +136,7 @@ def main():
     try:
         review_text = ai.review(prompt, max_tokens=args.max_tokens)
     except Exception as e:
-        print(f"[ERROR] AI API call failed: {e}")
+        print(f"[ERROR] AI API 调用失败: {e}")
         sys.exit(1)
 
     # Format and output

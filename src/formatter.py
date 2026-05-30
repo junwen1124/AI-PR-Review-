@@ -1,5 +1,6 @@
 """Format review output for CLI display using Rich."""
 
+import io
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
@@ -12,9 +13,10 @@ def format_review(pr_info: dict, review_text: str, use_color: bool = True) -> st
     if not use_color:
         return _format_plain(pr_info, review_text)
 
-    console = Console(record=True, width=100)
+    buf = io.StringIO()
+    console = Console(file=buf, record=True, width=100, force_terminal=use_color)
     _render_rich(console, pr_info, review_text)
-    return console.export_text()
+    return buf.getvalue()
 
 
 def _render_rich(console: Console, pr_info: dict, review_text: str):

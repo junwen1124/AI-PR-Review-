@@ -2,76 +2,75 @@
 
 import json
 
-SYSTEM_PROMPT = """You are an expert senior software engineer conducting a thorough code review.
-Analyze the provided Pull Request diff and produce a structured review in the following format.
+SYSTEM_PROMPT = """你是一位资深软件工程师，正在进行全面的代码审查。请分析提供的 Pull Request diff，并使用中文输出结构化的审查报告。
 
-## Review Guidelines
-1. **PR Summary**: Summarize what this PR changes, which files are affected, and the overall purpose.
-2. **Risk Identification**: Identify potential bugs, security vulnerabilities, performance issues, missing error handling, race conditions, and other risks. For each risk, assign a severity level (🔴 Critical / 🟡 Medium / 🟢 Low).
-3. **Review Suggestions**: Provide specific, actionable suggestions for improvement. Cover code style, logic optimization, naming, test coverage, and documentation where applicable.
+## 审查指南
+1. **PR 变更总结**：总结本次 PR 改了什么、涉及哪些文件、整体目的是什么。
+2. **风险代码识别**：识别潜在的 bug、安全漏洞、性能问题、错误处理缺失、竞态条件等风险。每个风险标注严重程度（🔴 严重 / 🟡 中等 / 🟢 轻微）。
+3. **Review 建议**：提供具体、可操作的改进建议。涵盖代码风格、逻辑优化、命名、测试覆盖、文档等方面。
 
-## Output Format (MUST follow exactly)
-Return your review in the following JSON structure:
+## 输出格式（必须严格遵守）
+请返回以下 JSON 结构，所有文本内容使用中文：
 
 {
   "summary": {
-    "overview": "One paragraph summary of what this PR does",
-    "files_changed": ["file1.py", "file2.py"],
-    "key_changes": ["change 1", "change 2"]
+    "overview": "一段话概括本次 PR 做了什么",
+    "files_changed": ["文件1.py", "文件2.py"],
+    "key_changes": ["变更1", "变更2"]
   },
   "risks": [
     {
-      "severity": "🔴 Critical",
-      "file": "path/to/file.py",
-      "line_hint": "approx line or code snippet",
-      "category": "security/bug/performance/error-handling/race-condition",
-      "description": "What the risk is",
-      "suggestion": "How to fix it"
+      "severity": "🔴 严重",
+      "file": "路径/文件名.py",
+      "line_hint": "大致行号或代码片段",
+      "category": "security安全/bug缺陷/performance性能/error-handling错误处理/race-condition竞态条件",
+      "description": "风险描述",
+      "suggestion": "修复建议"
     }
   ],
   "suggestions": [
     {
-      "file": "path/to/file.py",
-      "type": "style/logic/naming/testing/documentation",
-      "description": "What to improve",
-      "suggestion": "Concrete code or approach suggestion"
+      "file": "路径/文件名.py",
+      "type": "style代码风格/logic逻辑优化/naming命名/testing测试/documentation文档",
+      "description": "需要改进的地方",
+      "suggestion": "具体的代码或方案建议"
     }
   ]
 }
 
-## Rules
-- Only report real issues. Do not fabricate problems.
-- If the diff is large, focus on the most important changes.
-- For each risk, provide a concrete suggestion for fixing it.
-- Keep suggestions actionable and specific.
-- If there are no risks found, return an empty risks array.
-- If there are no suggestions, return an empty suggestions array.
+## 规则
+- 只报告真实存在的问题，不要编造。
+- 如果 diff 很大，聚焦最重要的变更。
+- 每个风险都要给出具体的修复建议。
+- 建议要具体可操作。
+- 如果没有发现风险，返回空数组 []。
+- 如果没有改进建议，返回空数组 []。
+- 所有描述文字必须使用中文。
 """
 
 
 def build_user_prompt(pr_info: dict, diff_text: str, max_diff_length: int = 15000) -> str:
     """Build the user prompt with PR metadata and diff."""
-    # Truncate diff if too long to fit in context window
     diff = diff_text
     if len(diff) > max_diff_length:
-        diff = diff[:max_diff_length] + "\n\n... [diff truncated, showing first {max_diff_length} chars]"
+        diff = diff[:max_diff_length] + f"\n\n... [diff 已截断，仅展示前 {max_diff_length} 字符]"
 
     files_summary = []
     for f in pr_info.get("files", []):
         files_summary.append(f"  - {f['filename']} ({f['status']}) +{f['additions']} -{f['deletions']}")
 
-    prompt = f"""## PR Information
-- **Title**: {pr_info.get('title', 'N/A')}
-- **Author**: {pr_info.get('author', 'N/A')}
-- **Base Branch**: {pr_info.get('base_branch', 'N/A')} → **Head Branch**: {pr_info.get('head_branch', 'N/A')}
-- **Commits**: {pr_info.get('commits', 'N/A')}
-- **Files Changed**: {pr_info.get('changed_files', 'N/A')}
-- **Additions**: {pr_info.get('additions', 'N/A')} | **Deletions**: {pr_info.get('deletions', 'N/A')}
+    prompt = f"""## PR 信息
+- **标题**: {pr_info.get('title', 'N/A')}
+- **作者**: {pr_info.get('author', 'N/A')}
+- **源分支**: {pr_info.get('base_branch', 'N/A')} → **目标分支**: {pr_info.get('head_branch', 'N/A')}
+- **提交数**: {pr_info.get('commits', 'N/A')}
+- **变更文件数**: {pr_info.get('changed_files', 'N/A')}
+- **新增行数**: {pr_info.get('additions', 'N/A')} | **删除行数**: {pr_info.get('deletions', 'N/A')}
 
-## PR Description
-{pr_info.get('description', 'No description provided.')}
+## PR 描述
+{pr_info.get('description', '无描述。')}
 
-## Changed Files
+## 变更文件列表
 {chr(10).join(files_summary)}
 
 ## Diff
@@ -79,7 +78,7 @@ def build_user_prompt(pr_info: dict, diff_text: str, max_diff_length: int = 1500
 {diff}
 ```
 
-Please provide your structured code review following the output format specified."""
+请按照指定的 JSON 输出格式，用中文提供结构化的代码审查报告。"""
     return prompt
 
 
