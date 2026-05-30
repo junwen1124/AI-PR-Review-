@@ -151,12 +151,12 @@ Key Changes:
 
 ### 1. 模型选择
 
-**选择 DeepSeek-Chat（DeepSeek-V4-pro）作为默认模型**，理由如下：
+**选择 DeepSeek-V4-pro 作为默认模型**，理由如下：
 
-- **性价比**：DeepSeek 的 API 定价约为 GPT-4o 的 1/10，对于需要处理大量 diff 文本的代码评审场景，成本可控
-- **代码理解能力**：DeepSeek-V4-pro 在 HumanEval、MBPP 等代码基准测试中表现优异，能够准确理解 Python/JavaScript/Go 等多语言代码
-- **上下文窗口**：支持 64K token 上下文，可以容纳较大的 PR diff
-- **兼容性**：DeepSeek API 完全兼容 OpenAI SDK，便于后续切换到其他模型
+- **性价比**：输入 $1.74/M tokens，输出 $3.48/M tokens，输出成本约为 GPT-4o 的三分之一，对于大量 diff 文本的评审场景成本可控
+- **代码理解能力**：LiveCodeBench 93.5%，SWE-Bench Verified 80.6%，代码评审和软件工程能力出色
+- **上下文窗口**：支持 1M token 上下文，可容纳超大型 PR 的完整 diff
+- **兼容性**：DeepSeek API 完全兼容 OpenAI SDK，零配置切换到 GPT、Claude 等模型
 
 同时，本工具通过 OpenAI 兼容接口设计，支持零配置切换到 GPT-4o、Claude、Qwen 等任意兼容模型，只需修改 `AI_BASE_URL` 和 `AI_MODEL` 环境变量。
 
