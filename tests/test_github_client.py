@@ -89,8 +89,8 @@ class TestReviewPrompt(unittest.TestCase):
         self.assertIn("dev", prompt)
         self.assertIn("app.py", prompt)
         self.assertIn("import sys", prompt)
-        self.assertIn("PR Information", prompt)
-        self.assertIn("Changed Files", prompt)
+        self.assertIn("PR 信息", prompt)
+        self.assertIn("变更文件列表", prompt)
         self.assertIn("Diff", prompt)
 
     def test_build_user_prompt_truncation(self):
@@ -100,7 +100,7 @@ class TestReviewPrompt(unittest.TestCase):
                    "commits": 1, "additions": 0, "deletions": 0, "changed_files": 0}
         long_diff = "x" * 20000
         prompt = build_user_prompt(pr_info, long_diff, max_diff_length=100)
-        self.assertIn("truncated", prompt.lower())
+        self.assertIn("截断", prompt)
 
 
 class TestParseReviewResponse(unittest.TestCase):
