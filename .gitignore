@@ -32,3 +32,5 @@ htmlcov/
 # Temp
 *.log
 tmp/
+.claude/
+*.traineddata
