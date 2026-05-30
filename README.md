@@ -153,7 +153,7 @@ Key Changes:
 
 **选择 DeepSeek-V4-pro 作为默认模型**，理由如下：
 
-- **性价比**：输入 $1.74/M tokens，输出 $3.48/M tokens，输出成本约为 GPT-4o 的三分之一，对于大量 diff 文本的评审场景成本可控
+- **性价比**：输入 ¥3/百万 tokens，输出 ¥6/百万 tokens（当前 2.5 折优惠），输出成本约为 GPT-4o 的十分之一，评审场景成本极低
 - **代码理解能力**：LiveCodeBench 93.5%，SWE-Bench Verified 80.6%，代码评审和软件工程能力出色
 - **上下文窗口**：支持 1M token 上下文，可容纳超大型 PR 的完整 diff
 - **兼容性**：DeepSeek API 完全兼容 OpenAI SDK，零配置切换到 GPT、Claude 等模型
