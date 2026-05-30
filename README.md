@@ -151,10 +151,10 @@ Key Changes:
 
 ### 1. 模型选择
 
-**选择 DeepSeek-Chat（DeepSeek-V3）作为默认模型**，理由如下：
+**选择 DeepSeek-Chat（DeepSeek-V4-pro）作为默认模型**，理由如下：
 
 - **性价比**：DeepSeek 的 API 定价约为 GPT-4o 的 1/10，对于需要处理大量 diff 文本的代码评审场景，成本可控
-- **代码理解能力**：DeepSeek-V3 在 HumanEval、MBPP 等代码基准测试中表现优异，能够准确理解 Python/JavaScript/Go 等多语言代码
+- **代码理解能力**：DeepSeek-V4-pro 在 HumanEval、MBPP 等代码基准测试中表现优异，能够准确理解 Python/JavaScript/Go 等多语言代码
 - **上下文窗口**：支持 64K token 上下文，可以容纳较大的 PR diff
 - **兼容性**：DeepSeek API 完全兼容 OpenAI SDK，便于后续切换到其他模型
 
