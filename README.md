@@ -2,6 +2,8 @@
 
 基于大模型的 GitHub Pull Request 自动代码评审工具。输入一个 PR 链接，自动输出**变更总结**、**风险代码识别**和**Review 建议**。
 
+📺 **Demo 演示视频**：[点击观看](https://www.bilibili.com/video/BV1zwVH6tEnN/)
+
 ## 功能特性
 
 - **PR 变更总结**：自动分析 PR 改动了哪些文件、主要变更内容
